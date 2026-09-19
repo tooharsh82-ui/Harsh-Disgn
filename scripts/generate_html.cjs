@@ -1,21 +1,16 @@
 const fs = require('fs');
 const path = require('path');
-const sharp = require('sharp');
 
 // Configuration
-const IMAGES_DIR = path.join(__dirname, '..', 'public', 'images');
 const OUTPUT_HTML = path.join(__dirname, '..', 'index.html');
-const MAX_IMAGE_WIDTH = 1280;
-const WEBP_QUALITY = 72;
 
-// Thumbnail Portfolio Data
+// Thumbnail Portfolio Data (Plain External Image Links - No Base64, No Downloads)
 const PROJECTS = [
   {
     id: 'tech-ai-03',
     title: 'Cyber Intelligence & Next-Gen Automation',
     category: 'Tech & AI',
-    imageFile: 'tech-ai-03.jpg',
-    fallbackUrl: 'https://i.ibb.co/S4ZGPvgd/FINAL-1.jpg',
+    imageUrl: 'https://i.ibb.co/S4ZGPvgd/FINAL-1.jpg',
     channelName: 'Tech & AI Channel',
     hook: 'Compelling visual tension establishing a clear curiosity gap based on the video hook.',
     strategy: 'Editorial-grade compositing with balanced lighting and zero generic clickbait clutter.',
@@ -29,8 +24,7 @@ const PROJECTS = [
     id: 'documentary-01',
     title: 'Unspoken History: The Declassified Chronicles',
     category: 'Documentary',
-    imageFile: 'documentary-01.jpg',
-    fallbackUrl: 'https://i.ibb.co/MQhDysD/IMG-20260910-202002.jpg',
+    imageUrl: 'https://i.ibb.co/MQhDysD/IMG-20260910-202002.jpg',
     channelName: 'Documentary Channel',
     hook: 'Cinematic atmosphere and documentary-grade lighting that respects the gravity of the script.',
     strategy: 'Dramatic shadows and realistic textures designed to create an authentic narrative scene.',
@@ -44,8 +38,7 @@ const PROJECTS = [
     id: 'documentary-02',
     title: 'The Silent Investigation: Uncovering What Happened',
     category: 'Documentary',
-    imageFile: 'documentary-02.jpg',
-    fallbackUrl: 'https://i.ibb.co/4nyXjHx3/IMG-20260806-191942.jpg',
+    imageUrl: 'https://i.ibb.co/4nyXjHx3/IMG-20260806-191942.jpg',
     channelName: 'Documentary Channel',
     hook: 'Moody, tension-filled visual setup crafted directly from key investigative evidence.',
     strategy: 'Deliberate balance of light and shadow emphasizing authentic narrative suspense.',
@@ -59,8 +52,7 @@ const PROJECTS = [
     id: 'documentary-03',
     title: 'The Turning Point: When Everything Changed',
     category: 'Documentary',
-    imageFile: 'documentary-03.jpg',
-    fallbackUrl: 'https://i.ibb.co/Gf5W65Zh/IMG-20260830-174211.jpg',
+    imageUrl: 'https://i.ibb.co/Gf5W65Zh/IMG-20260830-174211.jpg',
     channelName: 'Documentary Channel',
     hook: 'Epic narrative scale capturing high-stakes storytelling with polished visual clarity.',
     strategy: 'Harmonious color grading, realistic composites, and clear hierarchy for immediate feed impact.',
@@ -195,68 +187,10 @@ function getSvg(name, classes = 'w-4 h-4') {
   }
 }
 
-// Image processing function
-async function optimizeImage(filePath, fallbackUrl) {
-  let buffer;
-  if (fs.existsSync(filePath)) {
-    buffer = fs.readFileSync(filePath);
-  } else if (fallbackUrl) {
-    console.log(`Fetching missing image from ${fallbackUrl}...`);
-    const res = await fetch(fallbackUrl);
-    const arrayBuf = await res.arrayBuffer();
-    buffer = Buffer.from(arrayBuf);
-    fs.mkdirSync(IMAGES_DIR, { recursive: true });
-    fs.writeFileSync(filePath, buffer);
-  } else {
-    throw new Error(`Image not found at ${filePath}`);
-  }
-
-  const rawSize = buffer.length;
-
-  // Sharp optimization: Resize to max width, convert to WebP, quality 72
-  const optimizedBuffer = await sharp(buffer)
-    .resize({ width: MAX_IMAGE_WIDTH, withoutEnlargement: true })
-    .webp({ quality: WEBP_QUALITY, effort: 5 })
-    .toBuffer();
-
-  const optimizedSize = optimizedBuffer.length;
-  const base64Data = `data:image/webp;base64,${optimizedBuffer.toString('base64')}`;
-
-  return {
-    base64Data,
-    rawSize,
-    optimizedSize
-  };
-}
-
 async function generate() {
   console.log('--- Starting Harsh_Disgn Standalone HTML Generation ---');
-  console.log(`Images directory: ${IMAGES_DIR}`);
   console.log(`Output target: ${OUTPUT_HTML}`);
-
-  fs.mkdirSync(IMAGES_DIR, { recursive: true });
-
-  const processedProjects = [];
-  let totalRawBytes = 0;
-  let totalWebpBytes = 0;
-
-  for (const project of PROJECTS) {
-    const localImgPath = path.join(IMAGES_DIR, project.imageFile);
-    const { base64Data, rawSize, optimizedSize } = await optimizeImage(localImgPath, project.fallbackUrl);
-    
-    totalRawBytes += rawSize;
-    totalWebpBytes += optimizedSize;
-
-    console.log(`✔ [${project.id}] ${project.imageFile}: ${(rawSize / 1024).toFixed(1)} KB -> ${(optimizedSize / 1024).toFixed(1)} KB (WebP ${WEBP_QUALITY}%)`);
-
-    processedProjects.push({
-      ...project,
-      dataUrl: base64Data
-    });
-  }
-
-  console.log(`Total images raw size: ${(totalRawBytes / 1024 / 1024).toFixed(2)} MB`);
-  console.log(`Total WebP binary size: ${(totalWebpBytes / 1024).toFixed(1)} KB (~${((totalWebpBytes * 4 / 3) / 1024).toFixed(1)} KB base64)`);
+  console.log(`Configured projects: ${PROJECTS.length} external image links (no base64, no downloads)`);
 
   // Build the complete standalone HTML
   const html = `<!doctype html>
@@ -619,7 +553,7 @@ async function generate() {
           </div>
 
           <div class="text-xs text-[#666666] border-b border-[#111111] pb-0.5 font-medium self-start md:self-auto">
-            Showing <span id="gallery-count" class="font-bold text-[#111111]">${processedProjects.length}</span> curated projects
+            Showing <span id="gallery-count" class="font-bold text-[#111111]">${PROJECTS.length}</span> curated projects
           </div>
         </div>
 
@@ -647,7 +581,7 @@ async function generate() {
 
         <!-- Gallery Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7" id="gallery-grid">
-          ${processedProjects.map((p, idx) => `
+          ${PROJECTS.map((p, idx) => `
           <article
             data-id="${p.id}"
             data-category="${p.category}"
@@ -656,9 +590,9 @@ async function generate() {
             <!-- Thumbnail Container (16:9 aspect ratio strictly preserved) -->
             <div class="aspect-video w-full relative overflow-hidden bg-black">
               <img
-                src="${p.dataUrl}"
+                src="${p.imageUrl}"
                 alt="${p.title}"
-                ${idx > 0 ? 'loading="lazy"' : ''}
+                ${idx === 0 ? 'loading="eager"' : 'loading="lazy"'}
                 width="1280"
                 height="720"
                 style="aspect-ratio: 16/9;"
@@ -1072,25 +1006,13 @@ async function generate() {
   <!-- ================= CLIENT-SIDE VANILLA JAVASCRIPT ================= -->
   <script>
     // Embedded Project Data for Instant Modal & Filtering
-    const PROJECTS = ${JSON.stringify(processedProjects, (key, val) => key === 'dataUrl' ? undefined : val)};
-    
-    // Quick Map by ID for modal lookup
-    const projectMap = {};
-    document.querySelectorAll('#gallery-grid article').forEach((el) => {
-      const id = el.getAttribute('data-id');
-      const img = el.querySelector('img');
-      if (id && img) {
-        projectMap[id] = {
-          dataUrl: img.src
-        };
-      }
-    });
-
-    PROJECTS.forEach((p) => {
-      if (projectMap[p.id]) {
-        p.dataUrl = projectMap[p.id].dataUrl;
-      }
-    });
+    const PROJECTS = ${JSON.stringify(PROJECTS.map(p => ({
+      id: p.id,
+      title: p.title,
+      category: p.category,
+      imageUrl: p.imageUrl,
+      channelName: p.channelName
+    })))};
 
     // 1. Sticky Navbar Scroll Effect
     const navbar = document.getElementById('main-navbar');
@@ -1175,7 +1097,7 @@ async function generate() {
       const project = PROJECTS.find((p) => p.id === projectId);
       if (!project) return;
 
-      modalImage.src = project.dataUrl;
+      modalImage.src = project.imageUrl;
       modalImage.alt = project.title;
 
       lightbox.classList.remove('hidden');
@@ -1248,6 +1170,30 @@ async function generate() {
 </body>
 </html>`;
 
+  // VERIFICATION BEFORE FINISHING:
+  // 1. Confirm zero occurrences of "base64" anywhere in the generated HTML
+  const base64Matches = html.match(/base64/gi) || [];
+  if (base64Matches.length > 0) {
+    throw new Error(`Verification failed: Found ${base64Matches.length} occurrence(s) of "base64" in output HTML!`);
+  }
+
+  // 2. Confirm no inline data URIs exist in src attributes
+  if (html.includes('data:image/')) {
+    throw new Error('Verification failed: Found inline data:image URI in output HTML!');
+  }
+
+  // 3. Confirm all images use plain external URLs
+  const imgSrcRegex = /<img[^>]+src="([^">]+)"/g;
+  let match;
+  const foundImages = [];
+  while ((match = imgSrcRegex.exec(html)) !== null) {
+    if (match[1]) foundImages.push(match[1]);
+  }
+  console.log(`Verified ${foundImages.length} <img> tags in HTML template.`);
+  foundImages.forEach((src, i) => {
+    console.log(`  [Image ${i + 1}] src: ${src}`);
+  });
+
   fs.writeFileSync(OUTPUT_HTML, html, 'utf8');
 
   const finalStats = fs.statSync(OUTPUT_HTML);
@@ -1255,12 +1201,13 @@ async function generate() {
   const finalSizeMB = (finalStats.size / 1024 / 1024).toFixed(2);
 
   console.log('---------------------------------------------------------');
-  console.log(`🎉 SUCCESS: Generated standalone ${OUTPUT_HTML}`);
+  console.log(`🎉 SUCCESS: Generated pure-text standalone ${OUTPUT_HTML}`);
   console.log(`📦 Final file size: ${finalSizeKB} KB (${finalSizeMB} MB)`);
-  if (finalStats.size < 1.5 * 1024 * 1024) {
-    console.log(`✅ UNDER 1.5MB TARGET: ${finalSizeKB} KB is well within the 1.5MB budget!`);
+  console.log(`🔍 Base64 check: 0 occurrences found (100% pure external links)`);
+  if (finalStats.size < 200 * 1024) {
+    console.log(`✅ UNDER 200KB BUDGET: ${finalSizeKB} KB is well under the 200 KB target!`);
   } else {
-    console.warn(`⚠ Warning: Size exceeds 1.5MB (${finalSizeMB} MB)`);
+    console.warn(`⚠ Warning: Size exceeds 200KB (${finalSizeKB} KB)`);
   }
   console.log('---------------------------------------------------------');
 }
