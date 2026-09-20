@@ -1,15 +1,19 @@
 export type Category = 
   | 'All'
-  | 'Tech & AI'
-  | 'Documentary';
+  | 'Documentary'
+  | 'Geopolitics'
+  | 'AI & Business'
+  | 'True Crime & History'
+  | 'Informative';
 
 export interface ThumbnailProject {
   id: string;
   title: string;
-  category: 'Tech & AI' | 'Documentary';
+  category: 'Documentary' | 'Geopolitics' | 'AI & Business' | 'True Crime & History' | 'Informative';
   imageUrl: string;
   channelName?: string;
   views?: string;
+  ctr?: string;
   hook: string;
   strategy: string;
   featured?: boolean;

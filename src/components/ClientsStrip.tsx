@@ -10,8 +10,8 @@ export const ClientsStrip: React.FC = () => {
     },
     {
       icon: TrendingUp,
-      label: 'Tech & AI Systems',
-      sub: 'Modern computational topics'
+      label: 'Geopolitics & Finance',
+      sub: 'Data & deep dives'
     },
     {
       icon: Compass,

@@ -1,17 +1,25 @@
 import React from 'react';
-import { ArrowDown, ArrowUpRight, CheckCircle2 } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, Sparkles, CheckCircle2 } from 'lucide-react';
+import { ThumbnailProject } from '../types';
 
 interface HeroProps {
   onViewWork: () => void;
   onOpenContact: () => void;
+  onSelectThumbnail: (project: ThumbnailProject) => void;
+  featuredProjects: ThumbnailProject[];
 }
 
 export const Hero: React.FC<HeroProps> = ({
   onViewWork,
   onOpenContact,
+  onSelectThumbnail,
+  featuredProjects,
 }) => {
+  const mainHeroProject = featuredProjects[0] || null;
+  const secondaryProjects = featuredProjects.slice(1, 5);
+
   return (
-    <section id="home" className="pt-28 pb-12 md:pt-36 md:pb-16 overflow-hidden">
+    <section id="home" className="pt-28 pb-16 md:pt-36 md:pb-24 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 sm:px-8">
         
         {/* Top Header / Status Pill */}
@@ -82,7 +90,7 @@ export const Hero: React.FC<HeroProps> = ({
         </div>
 
         {/* Workflow Process Overview Quick Capsule */}
-        <div className="bg-white border border-[#e0e0db] rounded-[24px] p-6 shadow-sm">
+        <div className="mb-14 bg-white border border-[#e0e0db] rounded-[24px] p-6 shadow-sm">
           <div className="flex justify-between items-center mb-5 pb-3 border-b border-[#f0f0eb]">
             <span className="text-[11px] uppercase tracking-[1px] font-bold text-[#666666]">
               / Workflow
@@ -128,6 +136,98 @@ export const Hero: React.FC<HeroProps> = ({
                 <span className="text-[#777777]">High-res export</span>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Hero Visual Showcase Collage */}
+        <div id="hero-showcase-collage" className="mt-4">
+          <div className="flex items-center justify-between mb-4">
+            <div className="text-xs font-semibold uppercase tracking-widest text-[#777777]">
+              Featured Thumbnail Showcase
+            </div>
+            <div className="text-xs text-[#888888]">
+              Click any thumbnail for concept breakdown
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-6">
+            
+            {/* Primary Featured Large Card (7 cols) */}
+            {mainHeroProject && (
+              <div
+                onClick={() => onSelectThumbnail(mainHeroProject)}
+                className="md:col-span-7 group cursor-pointer relative rounded-2xl overflow-hidden bg-[#111111] border border-[#E0E0D8] shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300 hover:shadow-[0_16px_40px_rgba(0,0,0,0.12)] hover:-translate-y-1"
+              >
+                <div className="aspect-video w-full overflow-hidden relative">
+                  <img
+                    src={mainHeroProject.imageUrl}
+                    alt={mainHeroProject.title}
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                  />
+                  {/* Subtle dark overlay gradient for readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+
+                  {/* Top Left Tag */}
+                  <div className="absolute top-4 left-4 flex items-center gap-2">
+                    <span className="px-3 py-1 rounded-full bg-white border border-[#e0e0db] text-[#111111] text-xs font-bold uppercase shadow-sm">
+                      {mainHeroProject.category}
+                    </span>
+                    <span className="px-2.5 py-1 rounded-full bg-[#B7FF35] text-[#111111] border border-[#111111] text-xs font-bold flex items-center gap-1 shadow-sm">
+                      <Sparkles className="w-3 h-3 text-[#111111]" />
+                      {mainHeroProject.ctr}
+                    </span>
+                  </div>
+
+                  {/* Bottom Info */}
+                  <div className="absolute bottom-4 left-4 right-4 text-white">
+                    <h3 className="text-lg sm:text-xl font-bold leading-snug mb-1 group-hover:text-[#B7FF35] transition-colors">
+                      {mainHeroProject.title}
+                    </h3>
+                    <p className="text-xs text-white/80 line-clamp-1">
+                      {mainHeroProject.hook}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Secondary Thumbnails Grid (5 cols) */}
+            <div className="md:col-span-5 grid grid-cols-2 gap-4">
+              {secondaryProjects.map((project, idx) => (
+                <div
+                  key={project.id}
+                  onClick={() => onSelectThumbnail(project)}
+                  className="group cursor-pointer relative rounded-xl overflow-hidden bg-[#111111] border border-[#E0E0D8] shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-0.5"
+                >
+                  <div className="aspect-video w-full overflow-hidden relative">
+                    <img
+                      src={project.imageUrl}
+                      alt={project.title}
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+
+                    <div className="absolute top-2 left-2">
+                      <span className="px-2 py-0.5 rounded-full bg-white border border-[#e0e0db] text-[9px] font-bold text-[#111111] uppercase shadow-sm">
+                        {project.category}
+                      </span>
+                    </div>
+
+                    <div className="absolute bottom-2 left-2 right-2 text-white">
+                      <p className="text-xs font-semibold line-clamp-1 group-hover:text-[#B7FF35] transition-colors">
+                        {project.title}
+                      </p>
+                      <span className="text-[10px] text-[#B7FF35] font-bold">
+                        {project.ctr} CTR
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
           </div>
         </div>
 

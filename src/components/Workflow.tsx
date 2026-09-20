@@ -71,6 +71,32 @@ export const Workflow: React.FC = () => {
           ))}
 
         </div>
+
+        {/* Process Guarantee Strip */}
+        <div className="mt-12 rounded-[24px] bg-white p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4 border border-[#e0e0db]">
+          <div className="flex items-center gap-3.5">
+            <div className="w-9 h-9 rounded-full bg-[#B7FF35] border border-[#111111] flex items-center justify-center text-black shrink-0 font-bold">
+              <Zap className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="text-sm font-bold text-[#111111]">
+                Revision & Feedback Included
+              </div>
+              <div className="text-xs text-[#666666]">
+                Every project includes fine-tuning iterations to ensure maximum contrast and readability on mobile screens.
+              </div>
+            </div>
+          </div>
+
+          <a
+            href="#contact"
+            className="whitespace-nowrap px-6 py-3 rounded-full bg-[#111111] text-white text-xs font-semibold hover:bg-[#222222] transition-colors flex items-center gap-2 shrink-0"
+          >
+            <span>Start a Project</span>
+            <ArrowRight className="w-3.5 h-3.5 text-[#B7FF35]" />
+          </a>
+        </div>
+
       </div>
     </section>
   );

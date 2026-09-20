@@ -9,8 +9,11 @@ interface WorkGalleryProps {
 
 const CATEGORIES: Category[] = [
   'All',
-  'Tech & AI',
-  'Documentary'
+  'Documentary',
+  'Geopolitics',
+  'AI & Business',
+  'True Crime & History',
+  'Informative'
 ];
 
 export const WorkGallery: React.FC<WorkGalleryProps> = ({
@@ -88,19 +91,26 @@ export const WorkGallery: React.FC<WorkGalleryProps> = ({
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
 
                 {/* Top Badge */}
-                <div className="absolute top-3 left-3 flex items-center gap-2 pointer-events-none">
+                <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
                   <span className="px-2.5 py-1 rounded-full bg-white border border-[#e0e0db] text-[#111111] text-[10px] font-bold uppercase shadow-sm">
                     {project.category}
                   </span>
+                  
+                  {project.ctr && (
+                    <span className="px-2.5 py-1 rounded-full bg-[#B7FF35] text-[#111111] border border-[#111111] text-[10px] font-bold flex items-center gap-1 shadow-sm">
+                      <Sparkles className="w-3 h-3 text-[#111111]" />
+                      {project.ctr}
+                    </span>
+                  )}
                 </div>
 
-              {/* Hover Inspect Icon Pill */}
-              <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-200 transform translate-y-1 group-hover:translate-y-0">
-                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-sm text-black text-xs font-semibold shadow-lg border border-[#e0e0db]">
-                  <Maximize2 className="w-3.5 h-3.5 text-black" />
-                  View Preview
-                </span>
-              </div>
+                {/* Hover Inspect Icon Pill */}
+                <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-black text-xs font-semibold shadow-md border border-[#e0e0db]">
+                    <Maximize2 className="w-3.5 h-3.5" />
+                    Inspect Hook
+                  </span>
+                </div>
               </div>
 
               {/* Card Meta Content */}
