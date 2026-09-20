@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, ArrowRight, Eye, CheckCircle, RefreshCw, Send } from 'lucide-react';
+import { Sparkles, ArrowRight, Eye, CheckCircle, Send } from 'lucide-react';
 import { SAMPLE_TOPIC_CONCEPTS } from '../data/portfolioData';
 
 interface ConceptStudioProps {

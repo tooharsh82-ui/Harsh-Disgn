@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layers, ShieldCheck, Zap, Sparkles, Instagram, Mail } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 export const About: React.FC = () => {
   const principles = [
@@ -37,6 +37,10 @@ export const About: React.FC = () => {
                 <img
                   src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1200&auto=format&fit=crop"
                   alt="Harsh — Thumbnail Designer"
+                  loading="lazy"
+                  decoding="async"
+                  width={600}
+                  height={750}
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover grayscale contrast-110"
                 />

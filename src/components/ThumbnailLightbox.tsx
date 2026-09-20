@@ -80,6 +80,9 @@ export const ThumbnailLightbox: React.FC<ThumbnailLightboxProps> = ({
           <img
             src={project.imageUrl}
             alt={project.title}
+            decoding="async"
+            width={1280}
+            height={720}
             referrerPolicy="no-referrer"
             className="w-full h-full object-cover"
           />

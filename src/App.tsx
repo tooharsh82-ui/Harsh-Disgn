@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { ClientsStrip } from './components/ClientsStrip';
@@ -11,9 +11,12 @@ import { About } from './components/About';
 import { Testimonials } from './components/Testimonials';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
-import { ThumbnailLightbox } from './components/ThumbnailLightbox';
 import { THUMBNAIL_PROJECTS, SPECIALIZATIONS } from './data/portfolioData';
 import { ThumbnailProject } from './types';
+
+const ThumbnailLightbox = lazy(() =>
+  import('./components/ThumbnailLightbox').then((m) => ({ default: m.ThumbnailLightbox }))
+);
 
 export default function App() {
   const [selectedProject, setSelectedProject] = useState<ThumbnailProject | null>(null);
@@ -100,11 +103,15 @@ export default function App() {
       <Footer />
 
       {/* Lightbox Inspector Modal */}
-      <ThumbnailLightbox
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-        onRequestStyle={handleRequestStyle}
-      />
+      {selectedProject && (
+        <Suspense fallback={null}>
+          <ThumbnailLightbox
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+            onRequestStyle={handleRequestStyle}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }

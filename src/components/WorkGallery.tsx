@@ -83,6 +83,9 @@ export const WorkGallery: React.FC<WorkGalleryProps> = ({
                   src={project.imageUrl}
                   alt={project.title}
                   loading="lazy"
+                  decoding="async"
+                  width={1280}
+                  height={720}
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
                 />

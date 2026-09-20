@@ -162,6 +162,10 @@ export const Hero: React.FC<HeroProps> = ({
                   <img
                     src={mainHeroProject.imageUrl}
                     alt={mainHeroProject.title}
+                    width={1280}
+                    height={720}
+                    fetchPriority="high"
+                    decoding="async"
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                   />
@@ -204,6 +208,10 @@ export const Hero: React.FC<HeroProps> = ({
                     <img
                       src={project.imageUrl}
                       alt={project.title}
+                      loading="lazy"
+                      decoding="async"
+                      width={640}
+                      height={360}
                       referrerPolicy="no-referrer"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                     />

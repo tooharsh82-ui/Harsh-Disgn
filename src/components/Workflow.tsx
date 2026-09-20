@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, CheckCircle2, Clock, Zap } from 'lucide-react';
+import { ArrowRight, Clock, Zap } from 'lucide-react';
 import { WORKFLOW_STEPS } from '../data/portfolioData';
 
 export const Workflow: React.FC = () => {

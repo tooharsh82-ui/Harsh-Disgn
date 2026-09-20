@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, ArrowUpRight, Eye, Layers, Compass, Check } from 'lucide-react';
+import { Sparkles, ArrowUpRight, Eye, Layers, Compass } from 'lucide-react';
 import { ThumbnailProject } from '../types';
 
 interface FeaturedProjectProps {
@@ -52,6 +52,10 @@ export const FeaturedProject: React.FC<FeaturedProjectProps> = ({
                 <img
                   src={project.imageUrl}
                   alt={project.title}
+                  loading="lazy"
+                  decoding="async"
+                  width={1280}
+                  height={720}
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                 />
